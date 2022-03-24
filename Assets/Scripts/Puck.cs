@@ -74,13 +74,16 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
             return;
         }
         _isDragging = false;
-        _rb.AddForce(_force * 20f, ForceMode2D.Impulse);
+        _rb.AddForce(_force * 100f, ForceMode2D.Impulse);
     }
 
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        ReflectProjectile(_rb, collision.contacts[0].normal);
+        if (collision.gameObject.tag.ToLower() == "wall")
+        {
+            ReflectProjectile(_rb, collision.contacts[0].normal);
+        }
     }
 
     private void ReflectProjectile(Rigidbody2D rb, Vector3 reflectVector)
@@ -121,6 +124,11 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     public void OnEndDrag(PointerEventData eventData)
     {
 
+    }
+
+    public Vector3 GetDragVelocity()
+    {
+        return _dragDirection;
     }
 
     public void OnDrag(PointerEventData eventData)
