@@ -34,7 +34,10 @@ public class PuckMain : MonoBehaviour
         {
 
             Puck puck = collision.gameObject.GetComponent<Puck>();
-            _rb.AddForce(puck.GetDragVelocity() * 30f, ForceMode2D.Impulse);
+            if (puck.IsDragging())
+            {
+                _rb.AddForce(puck.GetDragVelocity() * 70f, ForceMode2D.Impulse);
+            }
         }
 
     }

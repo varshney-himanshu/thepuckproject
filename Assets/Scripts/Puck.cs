@@ -32,6 +32,10 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
         _rb = GetComponent<Rigidbody2D>();
     }
 
+    public bool IsDragging()
+    {
+        return this._isDragging;
+    }
     void Update()
     {
         if (_isDragging)
