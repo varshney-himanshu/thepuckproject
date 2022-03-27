@@ -46,21 +46,21 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
             this.gameObject.transform.localPosition = new Vector3(mousePos.x - startPosX, mousePos.y - startPosY, -5);
 
-            if (transform.position.x <= -8f)
+            if (transform.position.x <= -1.8f)
             {
-                transform.position = new Vector3(-8f, transform.position.y, 0);
+                transform.position = new Vector3(-1.8f, transform.position.y, 0);
             }
-            if (transform.position.x >= 8f)
+            if (transform.position.x >= 1.8f)
             {
-                transform.position = new Vector3(8f, transform.position.y, 0);
+                transform.position = new Vector3(1.8f, transform.position.y, 0);
             }
-            if (transform.position.y <= -3.8f)
+            if (transform.position.y <= -3.9f)
             {
-                transform.position = new Vector3(transform.position.x, -4.3f, 0);
+                transform.position = new Vector3(transform.position.x, -3.9f, 0);
             }
-            if (transform.position.y >= 3.8f)
+            if (transform.position.y >= 3.9f)
             {
-                transform.position = new Vector3(transform.position.x, 4.3f, 0);
+                transform.position = new Vector3(transform.position.x, 3.9f, 0);
             }
         }
     }
@@ -84,6 +84,7 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag.ToLower() == "wall")
         {
             ReflectProjectile(_rb, collision.contacts[0].normal);
