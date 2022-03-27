@@ -38,8 +38,21 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     float eastBound;
     float westBound;
 
+    float PUCK_WIDTH;
+    float WALL_WIDTH;
+
 
     // private float _topSpeed = 10f;
+
+    void Awake()
+    {
+        northBound = nw.transform.position.y - (nw.GetComponent<RectTransform>().rect.height)/2 * Mathf.Abs(nw.transform.localScale.x);
+        southBound = sw.transform.position.y + (sw.GetComponent<RectTransform>().rect.height)/2 * Mathf.Abs(sw.transform.localScale.x);
+        eastBound = ew.transform.position.x - (ew.GetComponent<RectTransform>().rect.width)/2 * Mathf.Abs(ew.transform.localScale.x);
+        westBound = ww.transform.position.x + (ww.GetComponent<RectTransform>().rect.width)/2 * Mathf.Abs(ww.transform.localScale.x);
+
+        PUCK_WIDTH = this.gameObject.GetComponent<RectTransform>().rect.width * Mathf.Abs(transform.localScale.x);
+    }
     void Start()
     {
         _dragStartPos = this.transform.position;
@@ -50,11 +63,10 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
         
 
-        northBound = nw.transform.position.y - Mathf.Abs(nw.transform.localScale.x);
-        southBound = sw.transform.position.y + Mathf.Abs(sw.transform.localScale.x);
-        eastBound = ew.transform.position.x - Mathf.Abs(ew.transform.localScale.x);
-        westBound = ww.transform.position.x + Mathf.Abs(ww.transform.localScale.x);
+        
 
+    //  RectTransform rt = this.gameObject.GetComponent<RectTransform>();
+     // puckWidth = rt.rect.width * Mathf.Abs(transform.localScale.x);
         Debug.Log("nw  " + northBound);
         Debug.Log("sw  " + southBound);
         Debug.Log("ew  " + eastBound);
@@ -73,34 +85,41 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
             oldPosition = newPosition;
             newPosition = new Vector3(mousePos.x - startPosX, mousePos.y - startPosY, 0);
-            //  this.gameObject.transform.localPosition = newPosition;
-            _rb.MovePosition(newPosition);
-            puckLine = newPosition - oldPosition;
+            this.gameObject.transform.localPosition = newPosition;
+            //_rb.MovePosition(newPosition);
+            //puckLine = newPosition - oldPosition;
+            Debug.Log(transform.position.x - Mathf.Abs(transform.localScale.y));
 
-            if (transform.position.x -  Mathf.Abs(transform.localScale.y)  <= westBound)
-            {
-                //transform.position = new Vector3(westBound  + Mathf.Abs(transform.localScale.y) ,   transform.position.y, 0);
+        }
+        
+        if (transform.position.x - PUCK_WIDTH/2 <= westBound)
+        {
 
-                _rb.MovePosition(new Vector3(westBound + Mathf.Abs(transform.localScale.y), transform.position.y, 0));
-            }
-            if (transform.position.x + Mathf.Abs(transform.localScale.y)   >= eastBound)
-            {
-               // transform.position = new Vector3(eastBound - Mathf.Abs(transform.localScale.y), transform.position.y, 0);
+            
+            transform.position = new Vector3(westBound  + PUCK_WIDTH/2,   transform.position.y, 0);
 
-                _rb.MovePosition(new Vector3(eastBound - Mathf.Abs(transform.localScale.y), transform.position.y, 0));
-            }
-            if (transform.position.y  - Mathf.Abs(transform.localScale.y)   <= southBound)
-            {
-                //transform.position = new Vector3(transform.position.x, southBound + Mathf.Abs(transform.localScale.y), 0);
+            
+        }
+        if (transform.position.x + PUCK_WIDTH/2 >= eastBound)
+        {
+            Debug.Log("baharr  jaa  rha  h  kanjar");
+             transform.position = new Vector3(eastBound - PUCK_WIDTH / 2, transform.position.y, 0);
 
-                _rb.MovePosition(new Vector3(transform.position.x, southBound + Mathf.Abs(transform.localScale.y), 0));
-            }
-            if (transform.position.y + Mathf.Abs(transform.localScale.y)   >= northBound)
-            {
-               // transform.position = new Vector3(transform.position.x, northBound - Mathf.Abs(transform.localScale.y), 0);
-                _rb.MovePosition(new Vector3(transform.position.x, northBound - Mathf.Abs(transform.localScale.y), 0));
+            //_rb.MovePosition(new Vector3(eastBound - Mathf.Abs(transform.localScale.y) / 2, transform.position.y, 0));
+        }
+        if (transform.position.y - PUCK_WIDTH / 2 <= southBound)
+        {
+            Debug.Log("baharr  jaa  rha  h  kanjar");
+            transform.position = new Vector3(transform.position.x, southBound + PUCK_WIDTH / 2, 0);
 
-            }
+            //_rb.MovePosition(new Vector3(transform.position.x, southBound + Mathf.Abs(transform.localScale.y) / 2, 0));
+        }
+        if (transform.position.y + PUCK_WIDTH / 2 >= northBound)
+        {
+            Debug.Log("baharr  jaa  rha  h  kanjar");
+            transform.position = new Vector3(transform.position.x, northBound - PUCK_WIDTH / 2, 0);
+            //_rb.MovePosition(new Vector3(transform.position.x, northBound - Mathf.Abs(transform.localScale.y), 0));
+
         }
     }
 
@@ -117,7 +136,7 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
             return;
         }
         _isDragging = false;
-        _rb.AddForce(puckLine * 250f, ForceMode2D.Impulse);
+        _rb.AddForce(_force * 250f, ForceMode2D.Impulse);
     }
 
 
@@ -133,8 +152,8 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
         //  _rb.MovePosition(_lastPos);
         //}
         Debug.Log("colision detexted by puck");
-        _isDragging = false;
-        _rb.MovePosition(_lastPos);
+      // _isDragging = false;
+       // _rb.MovePosition(_lastPos);
         _velocity = Vector3.Reflect(_velocity, collision.contacts[0].normal);
         _rb.velocity = _velocity;
        
@@ -192,14 +211,14 @@ public class Puck : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     public void OnDrag(PointerEventData eventData)
     {
         
-      //  _dragDirection = this.transform.position - _lastPos;
-      //  _force = _dragDirection;
-       // _lastPos = this.transform.position;
-        Vector3 mousePos;
-        mousePos = Input.mousePosition;
-        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-        _lastPos = mousePos;
-        _rb.MovePosition(mousePos);
+        _dragDirection = this.transform.position - _lastPos;
+       _force = _dragDirection;
+        _lastPos = this.transform.position;
+       // Vector3 mousePos;
+       // mousePos = Input.mousePosition;
+       // mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+       // _lastPos = mousePos;
+       // _rb.MovePosition(mousePos);
     }
 
 }
