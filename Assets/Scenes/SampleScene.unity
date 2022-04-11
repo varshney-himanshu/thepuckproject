@@ -206,7 +206,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!212 &121343650
 SpriteRenderer:
@@ -342,7 +342,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!212 &358338495
 SpriteRenderer:
@@ -829,7 +829,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!212 &1282692604
 SpriteRenderer:
@@ -952,6 +952,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FORCE_MULTIPIER: 80
+  _southWall: {fileID: 358338491}
+  _northWall: {fileID: 1924322620}
+  _eastWall: {fileID: 2065664343}
+  _westWall: {fileID: 1282692600}
 --- !u!212 &1326132257
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1105,7 +1109,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!212 &1491395993
 SpriteRenderer:
@@ -1241,7 +1245,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!212 &1679276615
 SpriteRenderer:
@@ -1377,7 +1381,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!212 &1924322624
 SpriteRenderer:
@@ -1513,7 +1517,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!212 &2065664347
 SpriteRenderer:
@@ -1649,7 +1653,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!212 &2119445296
 SpriteRenderer:
