@@ -50,19 +50,19 @@ public class Puck : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag.ToLower() == "wall")
-        {
-            ReflectProjectile(_rb, collision.contacts[0].normal);
-        }
+        //if (collision.gameObject.tag.ToLower() == "wall")
+        //{
+        //    ReflectProjectile(_rb, collision.contacts[0].normal);
+        //}
 
-        if (collision.gameObject.tag.ToLower() == "player")
-        {
-            Striker striker = collision.gameObject.GetComponent<Striker>();
-            if (striker.IsDragging())
-            {
-                _rb.AddForce(striker.GetDragVelocity() * FORCE_MULTIPIER, ForceMode2D.Impulse);
-            }
-        }
+        //if (collision.gameObject.tag.ToLower() == "player")
+        //{
+        //    Striker striker = collision.gameObject.GetComponent<Striker>();
+        //    if (striker.IsDragging())
+        //    {
+        //        _rb.AddForce(striker.GetDragVelocity() * FORCE_MULTIPIER, ForceMode2D.Impulse);
+        //    }
+        //}
     }
 
 

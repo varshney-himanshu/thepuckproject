@@ -16,7 +16,7 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
     private float startPosY;
     private Vector3 _velocity;
     private bool _disableTouch = false;
-
+     
     private Vector3 _dragInstantVelocity;
     private Rigidbody2D _rb;
 
@@ -60,24 +60,17 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
     void Start() { }
 
 
-    void CheckIfStrikerIsOutsideBounds()
+    void SetNewPosition(Vector3 pos)
     {
-        if (transform.position.x - STRIKER_WIDTH / 2 <= _westBound)
-        {
-            transform.position = new Vector3(_westBound + STRIKER_WIDTH / 2, transform.position.y, 0);
-        }
-        if (transform.position.x + STRIKER_WIDTH / 2 >= _eastBound)
-        {
-            transform.position = new Vector3(_eastBound - STRIKER_WIDTH / 2, transform.position.y, 0);
-        }
-        if (transform.position.y - STRIKER_WIDTH / 2 <= _southBound)
-        {
-            transform.position = new Vector3(transform.position.x, _southBound + STRIKER_WIDTH / 2, 0);
-        }
-        if (transform.position.y + STRIKER_WIDTH / 2 >= _northBound)
-        {
-            transform.position = new Vector3(transform.position.x, _northBound - STRIKER_WIDTH / 2, 0);
-        }
+
+        float leftBoundry = _westBound + STRIKER_WIDTH / 2;
+        float rightBoundry = _eastBound - STRIKER_WIDTH / 2;
+        float topBoundry = _northBound - STRIKER_WIDTH / 2;
+        float bottomBoundry = _southBound + STRIKER_WIDTH / 2;
+
+        Vector3 newPos = new Vector3(Mathf.Clamp(pos.x, leftBoundry, rightBoundry), Mathf.Clamp(pos.y, bottomBoundry, topBoundry), 0);
+       
+        _rb.MovePosition(newPos);
     }
 
     public bool IsDragging()
@@ -92,27 +85,16 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
             mousePos = Input.mousePosition;
             mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
-            this.gameObject.transform.localPosition = new Vector3(mousePos.x - startPosX, mousePos.y - startPosY, -5);
+            Vector3 newPosition = new Vector3(mousePos.x - startPosX, mousePos.y - startPosY, -5);
 
-            // if (transform.position.x <= -1.8f)
-            // {
-            //     transform.position = new Vector3(-1.8f, transform.position.y, 0);
-            // }
-            // if (transform.position.x >= 1.8f)
-            // {
-            //     transform.position = new Vector3(1.8f, transform.position.y, 0);
-            // }
-            // if (transform.position.y <= -3.9f)
-            // {
-            //     transform.position = new Vector3(transform.position.x, -3.9f, 0);
-            // }
-            // if (transform.position.y >= 3.9f)
-            // {
-            //     transform.position = new Vector3(transform.position.x, 3.9f, 0);
-            // }
+            //this.transform.position  = newPosition;
+            //_rb.MovePosition(newPosition);
+
+            SetNewPosition(newPosition);
+         
+
+            //CheckIfStrikerIsOutsideBounds();
         }
-
-        CheckIfStrikerIsOutsideBounds();
     }
 
     void FixedUpdate()
