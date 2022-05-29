@@ -16,7 +16,7 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
     private float startPosY;
     private Vector3 _velocity;
     private bool _disableTouch = false;
-     
+
     private Vector3 _dragInstantVelocity;
     private Rigidbody2D _rb;
 
@@ -28,10 +28,16 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
     [SerializeField] GameObject _eastWall;
     [SerializeField] GameObject _westWall;
 
+    [SerializeField] GameObject _centerPos;
+
     float _northBound;
     float _southBound;
     float _eastBound;
     float _westBound;
+
+    float _centerY;
+    float _centerX;
+
 
     float STRIKER_WIDTH;
     float STRIKER_HEIGHT;
@@ -45,15 +51,25 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
         _dragInstantVelocity = this.transform.position;
         _rb = GetComponent<Rigidbody2D>();
 
-        _northBound = _northWall.transform.position.y - (_northWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_northWall.transform.localScale.y);
-        _southBound = _southWall.transform.position.y + (_southWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_southWall.transform.localScale.y);
-        _eastBound = _eastWall.transform.position.x - (_eastWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_eastWall.transform.localScale.x);
-        _westBound = _westWall.transform.position.x + (_westWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_westWall.transform.localScale.x);
+        // _northBound = _northWall.transform.position.y - (_northWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_northWall.transform.localScale.y);
+        // _southBound = _southWall.transform.position.y + (_southWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_southWall.transform.localScale.y);
+        // _eastBound = _eastWall.transform.position.x - (_eastWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_eastWall.transform.localScale.x);
+        // _westBound = _westWall.transform.position.x + (_westWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_westWall.transform.localScale.x);
+
+
+
 
 
         STRIKER_WIDTH = this.gameObject.GetComponent<RectTransform>().rect.width * Mathf.Abs(transform.localScale.x);
         STRIKER_HEIGHT = this.gameObject.GetComponent<RectTransform>().rect.height * Mathf.Abs(transform.localScale.y);
+        _centerY = _centerPos.transform.position.y;
+        _centerX = _centerPos.transform.position.x;
 
+        // _northBound = _northWall.transform.position.y;
+        _northBound = _centerY;
+        _southBound = _southWall.transform.position.y;
+        _eastBound = _eastWall.transform.position.x;
+        _westBound = _westWall.transform.position.x;
 
     }
 
@@ -69,7 +85,7 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
         float bottomBoundry = _southBound + STRIKER_WIDTH / 2;
 
         Vector3 newPos = new Vector3(Mathf.Clamp(pos.x, leftBoundry, rightBoundry), Mathf.Clamp(pos.y, bottomBoundry, topBoundry), 0);
-       
+
         _rb.MovePosition(newPos);
     }
 
@@ -77,7 +93,7 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
     {
         return this._isDragging;
     }
-    void Update()
+    void LateUpdate()
     {
         if (_isDragging)
         {
@@ -91,7 +107,7 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
             //_rb.MovePosition(newPosition);
 
             SetNewPosition(newPosition);
-         
+
 
             //CheckIfStrikerIsOutsideBounds();
         }
@@ -114,7 +130,7 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
             return;
         }
         _isDragging = false;
-        _rb.AddForce(_dragInstantVelocity * FORCE_MULTIPLIER, ForceMode2D.Impulse);
+        /*  _rb.AddForce(_dragInstantVelocity * FORCE_MULTIPLIER, ForceMode2D.Impulse); */
     }
 
     void OnCollisionEnter2D(Collision2D collision)

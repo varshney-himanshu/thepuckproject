@@ -13,20 +13,22 @@ public class Puck : MonoBehaviour
     [SerializeField] GameObject _eastWall;
     [SerializeField] GameObject _westWall;
 
-    float _northBound;
+    /* float _northBound;
     float _southBound;
     float _eastBound;
-    float _westBound;
+    float _westBound; */
 
     float PUCK_WIDTH;
     float PUCK_HEIGHT;
 
+    Boundary boundary;
+
     void Awake()
     {
-        _northBound = _northWall.transform.position.y - (_northWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_northWall.transform.localScale.y);
-        _southBound = _southWall.transform.position.y + (_southWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_southWall.transform.localScale.y);
-        _eastBound = _eastWall.transform.position.x - (_eastWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_eastWall.transform.localScale.x);
-        _westBound = _westWall.transform.position.x + (_westWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_westWall.transform.localScale.x);
+        /*    _northBound = _northWall.transform.position.y - (_northWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_northWall.transform.localScale.y);
+           _southBound = _southWall.transform.position.y + (_southWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_southWall.transform.localScale.y);
+           _eastBound = _eastWall.transform.position.x - (_eastWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_eastWall.transform.localScale.x);
+           _westBound = _westWall.transform.position.x + (_westWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_westWall.transform.localScale.x); */
 
         PUCK_WIDTH = this.gameObject.GetComponent<RectTransform>().rect.width * Mathf.Abs(transform.localScale.x);
         PUCK_HEIGHT = this.gameObject.GetComponent<RectTransform>().rect.height * Mathf.Abs(transform.localScale.y);
