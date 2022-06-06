@@ -13,27 +13,19 @@ public class Puck : MonoBehaviour
     [SerializeField] GameObject _eastWall;
     [SerializeField] GameObject _westWall;
 
-    /* float _northBound;
-    float _southBound;
-    float _eastBound;
-    float _westBound; */
 
     float PUCK_WIDTH;
     float PUCK_HEIGHT;
 
-    Boundary boundary;
+    Boundary _boundary;
 
     void Awake()
     {
-        /*    _northBound = _northWall.transform.position.y - (_northWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_northWall.transform.localScale.y);
-           _southBound = _southWall.transform.position.y + (_southWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_southWall.transform.localScale.y);
-           _eastBound = _eastWall.transform.position.x - (_eastWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_eastWall.transform.localScale.x);
-           _westBound = _westWall.transform.position.x + (_westWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_westWall.transform.localScale.x); */
 
         PUCK_WIDTH = this.gameObject.GetComponent<RectTransform>().rect.width * Mathf.Abs(transform.localScale.x);
         PUCK_HEIGHT = this.gameObject.GetComponent<RectTransform>().rect.height * Mathf.Abs(transform.localScale.y);
 
-
+        _boundary = new Boundary(_northWall.transform.position.y - PUCK_HEIGHT / 2, _southWall.transform.position.y + PUCK_HEIGHT / 2, _westWall.transform.position.x + PUCK_WIDTH / 2, _eastWall.transform.position.x - PUCK_WIDTH / 2);
     }
     void Start()
     {
@@ -48,6 +40,11 @@ public class Puck : MonoBehaviour
     void Update()
     {
 
+        if (_rb.position.x > _boundary.right || _rb.position.x < _boundary.left || _rb.position.y > _boundary.top || _rb.position.y < _boundary.bottom)
+        {
+            Debug.Log("outside bounds!!!");
+            transform.position = (new Vector3(Mathf.Clamp(_rb.position.x, _boundary.left, _boundary.right), Mathf.Clamp(_rb.position.y, _boundary.bottom, _boundary.top), 0));
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)

@@ -27,8 +27,9 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
     [SerializeField] GameObject _northWall;
     [SerializeField] GameObject _eastWall;
     [SerializeField] GameObject _westWall;
-
     [SerializeField] GameObject _centerPos;
+
+    [SerializeField] webrtctest _rtc;
 
     float _northBound;
     float _southBound;
@@ -51,30 +52,34 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
         _dragInstantVelocity = this.transform.position;
         _rb = GetComponent<Rigidbody2D>();
 
-        // _northBound = _northWall.transform.position.y - (_northWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_northWall.transform.localScale.y);
-        // _southBound = _southWall.transform.position.y + (_southWall.GetComponent<RectTransform>().rect.height) / 2 * Mathf.Abs(_southWall.transform.localScale.y);
-        // _eastBound = _eastWall.transform.position.x - (_eastWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_eastWall.transform.localScale.x);
-        // _westBound = _westWall.transform.position.x + (_westWall.GetComponent<RectTransform>().rect.width) / 2 * Mathf.Abs(_westWall.transform.localScale.x);
-
-
-
-
 
         STRIKER_WIDTH = this.gameObject.GetComponent<RectTransform>().rect.width * Mathf.Abs(transform.localScale.x);
         STRIKER_HEIGHT = this.gameObject.GetComponent<RectTransform>().rect.height * Mathf.Abs(transform.localScale.y);
         _centerY = _centerPos.transform.position.y;
         _centerX = _centerPos.transform.position.x;
 
-        // _northBound = _northWall.transform.position.y;
-        _northBound = _centerY;
-        _southBound = _southWall.transform.position.y;
-        _eastBound = _eastWall.transform.position.x;
-        _westBound = _westWall.transform.position.x;
-
+        if (gameObject.tag.ToLower().Equals("player"))
+        {
+            _northBound = _centerY;
+            _southBound = _southWall.transform.position.y;
+            _eastBound = _eastWall.transform.position.x;
+            _westBound = _westWall.transform.position.x;
+        } else
+        {
+            _northBound = _northWall.transform.position.y;
+            _southBound = _centerY;
+            _eastBound = _eastWall.transform.position.x;
+            _westBound = _westWall.transform.position.x;
+        }
     }
 
     void Start() { }
 
+
+    public void SetPosition(Vector3 v)
+    {
+        _rb.MovePosition(v);
+    }
 
     void SetNewPosition(Vector3 pos)
     {
@@ -87,6 +92,7 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
         Vector3 newPos = new Vector3(Mathf.Clamp(pos.x, leftBoundry, rightBoundry), Mathf.Clamp(pos.y, bottomBoundry, topBoundry), 0);
 
         _rb.MovePosition(newPos);
+        _rtc.SendWebRTCMessage(_rtc.ConvertVector3ToLocationString(newPos));
     }
 
     public bool IsDragging()
@@ -107,6 +113,8 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
             //_rb.MovePosition(newPosition);
 
             SetNewPosition(newPosition);
+
+
 
 
             //CheckIfStrikerIsOutsideBounds();
