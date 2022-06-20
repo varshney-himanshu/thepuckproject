@@ -13,6 +13,8 @@ public class Puck : MonoBehaviour
     [SerializeField] GameObject _eastWall;
     [SerializeField] GameObject _westWall;
 
+    [SerializeField] webrtctest _rtc;
+
 
     float PUCK_WIDTH;
     float PUCK_HEIGHT;
@@ -29,22 +31,39 @@ public class Puck : MonoBehaviour
     }
     void Start()
     {
+        Application.targetFrameRate = 60;
         _rb = this.GetComponent<Rigidbody2D>();
         _velocity = _rb.velocity;
     }
     void FixedUpdate()
     {
-        _velocity = _rb.velocity;
+        if (_rtc.GetRole().ToLower().Equals("caller"))
+        {
+            _velocity = _rb.velocity;
+            _rtc.SendWebRTCMessage(_rtc.ConvertVector3ToLocationStringForPuck(transform.position));
+            //_rtc.SendPuckLocation(transform.position);
+        }
+        
+    }
+
+    public void SetPosition(Vector3 v)
+    {
+        transform.position = v;
     }
 
     void Update()
     {
 
-        if (_rb.position.x > _boundary.right || _rb.position.x < _boundary.left || _rb.position.y > _boundary.top || _rb.position.y < _boundary.bottom)
+        if (_rtc.GetRole().ToLower().Equals("caller"))
         {
-            Debug.Log("outside bounds!!!");
-            transform.position = (new Vector3(Mathf.Clamp(_rb.position.x, _boundary.left, _boundary.right), Mathf.Clamp(_rb.position.y, _boundary.bottom, _boundary.top), 0));
+            if (_rb.position.x > _boundary.right || _rb.position.x < _boundary.left || _rb.position.y > _boundary.top || _rb.position.y < _boundary.bottom)
+            {
+                Debug.Log("outside bounds!!!");
+                transform.position = (new Vector3(Mathf.Clamp(_rb.position.x, _boundary.left, _boundary.right), Mathf.Clamp(_rb.position.y, _boundary.bottom, _boundary.top), 0));
+            }
         }
+
+        
     }
 
     void OnCollisionEnter2D(Collision2D collision)

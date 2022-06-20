@@ -73,7 +73,9 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
         }
     }
 
-    void Start() { }
+    void Start() {
+        Application.targetFrameRate = 60;
+            }
 
 
     public void SetPosition(Vector3 v)
@@ -93,6 +95,7 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
 
         _rb.MovePosition(newPos);
         _rtc.SendWebRTCMessage(_rtc.ConvertVector3ToLocationString(newPos));
+        //_rtc.SendStrikerLocation(newPos);
     }
 
     public bool IsDragging()
@@ -143,6 +146,10 @@ public class Striker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragH
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (_rtc.GetRole().ToLower().Equals("receiver"))
+        {
+            return;
+        }
         Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag.ToLower() == "wall")
         {

@@ -1674,6 +1674,7 @@ MonoBehaviour:
   _northWall: {fileID: 1521498253}
   _eastWall: {fileID: 1138431091}
   _westWall: {fileID: 2081614848}
+  _rtc: {fileID: 1706173094}
 --- !u!212 &1326132257
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1980,6 +1981,7 @@ MonoBehaviour:
   _overlayCanvas: {fileID: 1911186151}
   _player1: {fileID: 469137437}
   _player2: {fileID: 6205040}
+  _puck: {fileID: 1326132256}
 --- !u!4 &1706173095
 Transform:
   m_ObjectHideFlags: 0

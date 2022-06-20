@@ -36,6 +36,7 @@ public class webrtctest : MonoBehaviour
 
     [SerializeField] Striker _player1;
     [SerializeField] Striker _player2;
+    [SerializeField] Puck _puck;
 
     private void Awake()
     {
@@ -44,6 +45,8 @@ public class webrtctest : MonoBehaviour
 
     void Start()
     {
+
+        Application.targetFrameRate = 60;
         go = GameObject.Find("SocketIO");
         socket = go.GetComponent<SocketIOComponent>();
         
@@ -52,6 +55,8 @@ public class webrtctest : MonoBehaviour
         socket.On("remote-peer-ice-candidate", ProcessRemotePeerIceCandidate);
         socket.On("remote-peer-offer", ProcessRemotePeerOffer);
         socket.On("remote-peer-answer", ProcessRemotePeerAnswer);
+        socket.On("striker-location", ProcessStrikerLocation);
+        socket.On("puck-location", ProcessPuckLocation);
     }
 
     // Update is called once per frame
@@ -65,6 +70,55 @@ public class webrtctest : MonoBehaviour
             }
        
         }
+    }
+
+    public void ProcessStrikerLocation(SocketIOEvent e)
+    {
+        Location temp = JsonConvert.DeserializeObject<Location>(e.data.ToString());
+
+        if (ld.role.ToLower().Equals("caller"))
+        {
+            _player2.SetPosition(new Vector3(float.Parse(temp.xval) , float.Parse(temp.yval) , float.Parse(temp.zval)));
+        }
+        else
+        {
+            _player1.SetPosition(new Vector3(float.Parse(temp.xval), float.Parse(temp.yval), float.Parse(temp.zval)));
+        }
+    }
+
+    public void ProcessPuckLocation(SocketIOEvent e)
+    {
+        Location temp = JsonConvert.DeserializeObject<Location>(e.data.ToString());
+
+      
+            if (ld.role.ToLower().Equals("receiver"))
+            {
+                _puck.SetPosition(new Vector3(float.Parse(temp.xval), float.Parse(temp.yval), float.Parse(temp.zval)));
+            }
+
+        
+    }
+
+    
+
+    public void SendStrikerLocation(Vector3 v)
+    {
+        Dictionary<string, string> location = new Dictionary<string, string>();
+        location["xval"] = v.x.ToString();
+        location["yval"] = v.y.ToString();
+        location["zval"] = v.z.ToString();
+
+        socket.Emit("self-striker-location", new JSONObject(location));
+    }
+
+    public void SendPuckLocation(Vector3 v)
+    {
+        Dictionary<string, string> location = new Dictionary<string, string>();
+        location["xval"] = v.x.ToString();
+        location["yval"] = v.y.ToString();
+        location["zval"] = v.z.ToString();
+
+        socket.Emit("caller-puck-location", new JSONObject(location));
     }
 
     public bool IsDataChannelOpened(){
@@ -132,6 +186,11 @@ public class webrtctest : MonoBehaviour
         return $"location,{v.x},{v.y},{v.z}";
     }
 
+
+    public string ConvertVector3ToLocationStringForPuck(Vector3 v)
+    {
+        return $"puck,{v.x},{v.y},{v.z}";
+    }
 
 
 
@@ -240,6 +299,16 @@ public class webrtctest : MonoBehaviour
             {
                 _player1.SetPosition(ConvertLocationStringToVector3(msg));
             }
+        }
+
+
+        if (msg.Contains("puck"))
+        {
+            if (ld.role.ToLower().Equals("receiver"))
+            {
+                _puck.SetPosition(ConvertLocationStringToVector3(msg));
+            }
+ 
         }
     }
 
